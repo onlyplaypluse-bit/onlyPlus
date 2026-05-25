@@ -206,7 +206,7 @@ function SendMessage() {
                             <h1 id="useruser">{chatuser?.userName || "Loading..."}</h1>
                             <p style={{position:"absolute",top:"30px",marginLeft:"4px"}}>
                                 {
-                                    type && <p id="typeUser" style={{ color:"green",textShadow:"0.3px 0.3px 0.5px black"}}>Typing...</p>
+                                    type && <p id="typeUser" style={{ color:"green",textShadow:"0.3px 0.3px 0.5px black"}}>{type? "Typing...":""}</p>
                                 }
                             </p>
                         </div>
