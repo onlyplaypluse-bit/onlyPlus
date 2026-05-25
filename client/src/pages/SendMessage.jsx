@@ -25,10 +25,12 @@ function SendMessage() {
     let [input, setInput] = useState("")
     // let [message, setMessage] = useState([])
     let [roomId, setRoomId] = useState("")
+    let typingTimeoutRef = useRef()
     let { onlineData } = useSelector(state => state.user)
     let { serverUrl } = useContext(dataContext)
     let [chatuser, setChatuser] = useState()
     let [del, setDel] = useState(false)
+    let [type, setType] = useState(false)
 
 
 
@@ -129,9 +131,9 @@ function SendMessage() {
         return () => socket.off("receive_message")
     }, [messageData, dispatch])
 
-   
-   
-   
+
+
+
 
 
 
@@ -146,6 +148,52 @@ function SendMessage() {
 
 
     let nav = useNavigate()
+
+
+
+    useEffect(() => {
+        let timer
+        let payLoad = {
+            room: roomId,
+            senderId: userData?._id
+        }
+        if (input.trim() !== "" && roomId) {
+            timer = setTimeout(() => {
+                socket.emit("typing", payLoad)
+            }, 1000);
+        }
+        return ()=> clearTimeout(timer)
+    }, [input])
+
+    useEffect(() => {
+        if (!socket) return
+        let timer;
+        socket.on("user_typing", (data) => {
+            if (data.senderId?.toString() === friend?.toString()) {
+                setType(true)
+
+                if (timer) clearTimeout(timer)
+
+                timer = setTimeout(() => {
+                    setType(false)
+                }, 2000);
+
+
+            }
+        })
+
+        return () => {
+            socket.off("user_typing")
+            if (timer) clearTimeout(timer);
+        }
+    }, [friend])
+
+
+
+
+
+
+
     return (
         <div className="" >
 
@@ -154,7 +202,14 @@ function SendMessage() {
                     <div className="" style={{ display: "flex", alignContent: "center", justifyContent: "center", gap: "3px" }}>
                         <IoMdArrowBack onClick={() => { nav("/message") }} style={{ fontSize: "25px", marginTop: "6px", marginRight: "8px" }} />
                         <img src={chatuser?.image || dp} id="userDP" />
-                        <h1 id="useruser">{chatuser?.userName || "Loading..."}</h1>
+                        <div className="userType">
+                            <h1 id="useruser">{chatuser?.userName || "Loading..."}</h1>
+                            <p style={{position:"absolute",top:"30px",marginLeft:"4px"}}>
+                                {
+                                    type && <p style={{ color: "pink", fontWeight: "bold" }}>Typing...</p>
+                                }
+                            </p>
+                        </div>
                         <h1>{
                             chatuser?.verify === true && <MdVerified style={{ color: "blue", backgroundColor: "white", borderRadius: "50%", width: "16px", height: "16px", position: "absolute", top: "15px" }} />
                         }</h1>

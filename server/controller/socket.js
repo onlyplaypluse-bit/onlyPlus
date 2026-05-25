@@ -11,7 +11,7 @@ export const connectionIO = (io) => {
             // console.log("userOnline", userId)
             onlineUsers[userId] = socket.id
 
-            io.emit("onlineUser", Object.keys(onlineUsers))
+            io.emit("onlineUser", Object.keys(onlineUsers)) 
         })
 
         socket.on("roomId", (roomId) => {
@@ -33,6 +33,12 @@ export const connectionIO = (io) => {
 
 
             io.to(data.room).emit("receive_message", saveMessage)
+        })
+
+        socket.on("typing",(data)=>{
+            // console.log(" user typing...",data)
+
+            socket.to(data.room).emit("user_typing",data)
         })
 
 
