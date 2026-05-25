@@ -176,7 +176,7 @@ function SendMessage() {
 
                 timer = setTimeout(() => {
                     setType(false)
-                }, 2000);
+                }, 1000);
 
 
             }
@@ -254,7 +254,7 @@ function SendMessage() {
                     })
                 }
 
-                <p style={{}}>
+                <p style={{position:"fixed",bottom:"50px"}}>
                     {
                         type && <p id="typeUser" style={{marginBottom:"50px", display:"inline",background:"linear-gradient(to right, rgb(87, 255, 72), rgb(0, 78, 33))", paddingInline: "11px", paddingBlock: "5px", margin: "9px",borderRadius:"0px 9px 9px 9px"}}>{type ? "Typing..." : ""}</p>
                     }
