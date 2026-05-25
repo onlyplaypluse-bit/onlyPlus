@@ -162,7 +162,7 @@ function SendMessage() {
                 socket.emit("typing", payLoad)
             }, 300);
         }
-        return ()=> clearTimeout(timer)
+        return () => clearTimeout(timer)
     }, [input])
 
     useEffect(() => {
@@ -204,9 +204,9 @@ function SendMessage() {
                         <img src={chatuser?.image || dp} id="userDP" />
                         <div className="userType">
                             <h1 id="useruser">{chatuser?.userName || "Loading..."}</h1>
-                            <p style={{position:"absolute",top:"30px",marginLeft:"4px"}}>
+                            <p style={{ position: "absolute", top: "30px", marginLeft: "4px" }}>
                                 {
-                                    type && <p id="typeUser" style={{ color:"green",textShadow:"0.3px 0.3px 0.5px black"}}>{type? "Typing...":""}</p>
+                                    type && <p id="typeUser" style={{ color: "green", textShadow: "0.3px 0.3px 0.5px black" }}>{type ? "Typing..." : ""}</p>
                                 }
                             </p>
                         </div>
@@ -253,7 +253,16 @@ function SendMessage() {
                         )
                     })
                 }
+
+                <p style={{}}>
+                    {
+                        type && <p id="typeUser" style={{marginBottom:"50px", display:"inline",background:"linear-gradient(to right, rgb(87, 255, 72), rgb(0, 78, 33))", paddingInline: "11px", paddingBlock: "5px", margin: "9px",borderRadius:"0px 9px 9px 9px"}}>{type ? "Typing..." : ""}</p>
+                    }
+                </p>
+
             </div>
+
+
 
 
 
