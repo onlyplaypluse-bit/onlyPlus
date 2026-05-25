@@ -160,7 +160,7 @@ function SendMessage() {
         if (input.trim() !== "" && roomId) {
             timer = setTimeout(() => {
                 socket.emit("typing", payLoad)
-            }, 1000);
+            }, 300);
         }
         return ()=> clearTimeout(timer)
     }, [input])
