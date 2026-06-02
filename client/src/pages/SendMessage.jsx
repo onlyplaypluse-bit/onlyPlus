@@ -312,7 +312,7 @@ function SendMessage() {
                                         margin: "5px 9px",
                                         height: "auto",
                                         width: "250px",
-                                        background: isMe?"linear-gradient(to right, rgb(255, 0, 200), rgb(178, 90, 250))":"linear-gradient(to right, rgb(255, 135, 229), rgb(210, 155, 255))",
+                                        background: isMe?"linear-gradient(to right, rgb(255, 0, 200), rgb(178, 90, 250))":"linear-gradient(to right, rgb(145, 108, 137), rgb(121, 103, 136))",
 
                                         display: "flex",
                                         alignItems: "center",
