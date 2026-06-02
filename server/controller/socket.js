@@ -21,12 +21,12 @@ export const connectionIO = (io) => {
 
 
         socket.on("send_message", async (data) => {
-            // console.log(data)
 
             const newMessage = new MessageModel({
                 room: data.room,
                 senderId: data.senderId,
                 text: data.text,
+                image:data.image
             })
 
             const saveMessage = await newMessage.save()

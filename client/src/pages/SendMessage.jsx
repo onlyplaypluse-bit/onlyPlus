@@ -14,7 +14,10 @@ import { MdVerified } from "react-icons/md";
 import dp from "../assets/dp.png"
 import { IoMdArrowBack } from "react-icons/io";
 import { HiDotsVertical } from "react-icons/hi";
+import { GoPlus } from "react-icons/go";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import socket from "./socketConnect";
+import imageCompression from "browser-image-compression"
 // const socket = io.connect("http://192.168.43.163:8000")
 // const socket = io.connect("http://localhost:8000")
 
@@ -36,6 +39,29 @@ function SendMessage() {
 
 
     let dispatch = useDispatch()
+
+
+    let file = useRef()
+
+    let [frontendImage, setFrontendImage] = useState("")
+    let [backendImage, setBackendImage] = useState("")
+
+    const handleSendImage = async (e) => {
+        let file = e.target.files[0]
+
+        if (!file) return;
+
+        const options = {
+            maxSizeMB: 0.2,
+            maxWidthOrHeight: 600,
+            useWebWorker: true
+        };
+        const compressedFile = await imageCompression(file, options)
+        setBackendImage(compressedFile)
+        let image = URL.createObjectURL(compressedFile)
+        setFrontendImage(image)
+        setDel(false)
+    }
 
 
 
@@ -95,16 +121,42 @@ function SendMessage() {
 
     const handle = async (e) => {
         e.preventDefault()
+
+        if (!input.trim() && !backendImage) return
+
         try {
-            if (socket && input.trim()) {
+
+            let uploadImage = "";
+
+            if (backendImage) {
+                const formData = new FormData()
+                formData.append("image", backendImage)
+
+                const res = await axios.post(`${serverUrl}/chat-image`, formData, {
+                    withCredentials: true,
+                    // headers: {
+                    //     "Content-Type": "multipart/form-data"
+                    // }
+                })
+
+                console.log("Backend se aaya response:", res.data);
+
+                uploadImage = res.data.image.secure_url
+            }
+
+            if (socket) {
                 const payload = {
                     text: input,
                     room: roomId,
-                    senderId: userData?._id
+                    senderId: userData?._id,
+                    image: uploadImage
                 }
                 socket.emit("send_message", payload)
             }
             setInput("")
+            setBackendImage("");
+            setFrontendImage("");
+            setDel(false);
         } catch (error) {
 
         }
@@ -194,6 +246,11 @@ function SendMessage() {
 
 
 
+
+
+
+
+
     return (
         <div className="" >
 
@@ -216,7 +273,7 @@ function SendMessage() {
                     </div>
                     <div className="" style={{ display: "flex", alignContent: "center", justifyContent: "center", gap: "10px" }}>
                         <h4 style={{ color: checkOnline ? "green" : "gray", textShadow: checkOnline ? "0.3px 0.3px 0.1px white" : "black", display: "flex", alignItems: "center", justifyContent: "center" }}><GoDotFill />{checkOnline ? "Online" : "Offline"}</h4>
-                        <HiDotsVertical onClick={(prev) => { setDel(prev => !prev) }} />
+                        <HiDotsVertical style={{ cursor: "pointer" }} onClick={(prev) => { setDel(prev => !prev) }} />
                     </div>
 
                 </div>
@@ -226,8 +283,10 @@ function SendMessage() {
 
                 {
                     del &&
-                    <div className="deleteDiv" onClick={deleteAPI}>
-                        <p id="Dchat">Delete chat</p>
+                    <div className="deleteDiv">
+                        <input type="file" style={{ display: "none" }} onChange={handleSendImage} ref={file} name="" id="" />
+                        <p id="Ichat" onClick={() => { file.current.click() }}>Image<span><GoPlus /></span> </p>
+                        <p id="Dchat" onClick={deleteAPI}>Delete <span><RiDeleteBin6Line /></span> </p>
                     </div>
                 }
 
@@ -248,19 +307,61 @@ function SendMessage() {
                         let isMe = userData?._id === value.senderId
                         return (
                             <div className="" key={index} style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", width: "100%" }}>
-                                <p id="realMessage" style={{ background: isMe ? " linear-gradient(to right, rgb(255, 0, 200), rgb(178, 90, 250))" : "linear-gradient(to right, rgb(145, 108, 137), rgb(121, 103, 136))", paddingInline: "11px", paddingBlock: "5px", margin: "9px", borderRadius: isMe ? "9px 0px 9px 9px" : "0px 9px 9px 9px" }}>{value.text}</p>
+                                {value.image && (
+                                    <div style={{
+                                        margin: "5px 9px",
+                                        height: "auto",
+                                        width: "250px",
+                                        background: "linear-gradient(to right, rgb(255, 0, 200), rgb(178, 90, 250))",
+
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        borderRadius: isMe ? "9px 0px 9px 9px" : "0px 9px 9px 9px",
+
+
+
+                                    }}>
+                                        <img
+                                            src={value.image}
+                                            alt="Chat Attachment"
+                                            style={{
+                                                height: "90%",
+                                                width: "240px",
+                                                borderRadius: isMe ? "9px 0px 9px 9px" : "0px 9px 9px 9px",
+                                                objectFit: "cover",
+                                                boxShadow: "0px 2px 8px rgba(0,0,0,0.15)",
+
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                                {value.text && (
+                                    <p id="realMessage" style={{
+                                        background: isMe ? "linear-gradient(to right, rgb(255, 0, 200), rgb(178, 90, 250))" : "linear-gradient(to right, rgb(145, 108, 137), rgb(121, 103, 136))",
+                                        paddingInline: "11px",
+                                        paddingBlock: "5px",
+                                        margin: "5px 9px",
+                                        borderRadius: isMe ? "9px 0px 9px 9px" : "0px 9px 9px 9px"
+                                    }}>
+                                        {value.text}
+                                    </p>
+                                )}
                             </div>
                         )
                     })
                 }
 
-                <p style={{position:"fixed",bottom:"50px"}}>
+                <p style={{ position: "fixed", bottom: "50px" }}>
                     {
-                        type && <p id="typeUser" style={{marginBottom:"50px", display:"inline",background:"linear-gradient(to right, rgb(87, 255, 72), rgb(0, 78, 33))", paddingInline: "11px", paddingBlock: "5px", margin: "9px",borderRadius:"0px 9px 9px 9px"}}>{type ? "Typing..." : ""}</p>
+                        type && <p id="typeUser" style={{ marginBottom: "50px", display: "inline", background: "linear-gradient(to right, rgb(87, 255, 72), rgb(0, 78, 33))", paddingInline: "11px", paddingBlock: "5px", margin: "9px", borderRadius: "0px 9px 9px 9px" }}>{type ? "Typing..." : ""}</p>
                     }
                 </p>
 
             </div>
+
+
+
 
 
 
@@ -277,9 +378,21 @@ function SendMessage() {
 
             <div className="MesHead">
 
+
+                {
+                    frontendImage &&
+
+                    <div className="imageSetDiv">
+                        <img src={frontendImage} id="imageSet" />
+                    </div>
+
+                }
+
+
+
                 <form id="sendMess" onSubmit={handle}>
                     <input type="text" name="" placeholder="Message..." id="sendInput" onChange={(e) => { setInput(e.target.value) }} value={input} />
-                    <button id="sendbtn"><FiSend /></button>
+                    <button onClick={() => { setFrontendImage(false) }} id="sendbtn"><FiSend /></button>
                 </form>
             </div>
         </div>

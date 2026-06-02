@@ -681,6 +681,8 @@ body {
 #useruser {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 19px;
+    margin-block: 9px;
+    margin-inline: 5px;
 }
 
 
@@ -743,13 +745,41 @@ body {
 .deleteDiv {
     position: absolute;
     right: 9px;
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(39, 10, 73);
     width: 110px;
-    height: 35px;
+    height: 75px;
     border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-block: 13px;
+    box-shadow: 0.3px 0.3px 3px white;
+}
+
+#Ichat {
+    background-color: green;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-block: 9px;
+    padding-inline: 9px;
+    padding-block: 3px;
+    border-radius: 5px;
+    gap: 6px;
+}
+
+#Dchat {
+    background-color: rgb(255, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-block: 9px;
+    padding-inline: 9px;
+    padding-block: 3px;
+    border-radius: 5px;
+    gap: 6px;
+
 }
 
 #seeMore {
@@ -983,7 +1013,7 @@ body {
     top: 30%;
     height: 150px;
     width: 97%;
-    background-color: rgba(24, 12, 38,0.9);
+    background-color: rgba(24, 12, 38, 0.9);
     box-shadow: 0.3px 0.3px 9px white;
     border-radius: 9px;
     display: flex;
@@ -998,7 +1028,7 @@ body {
     justify-content: center;
 }
 
-#sendAdmin{
+#sendAdmin {
     background-color: rgb(24, 12, 38);
     height: 30px;
     width: 88%;
@@ -1009,12 +1039,13 @@ body {
     color: white;
     outline: none;
 }
-#sendAdmin::placeholder{
+
+#sendAdmin::placeholder {
     color: white;
 }
 
-.sendAllUserDivMess{
-     position: fixed;
+.sendAllUserDivMess {
+    position: fixed;
     height: 100vh;
     width: 100%;
     display: flex;
@@ -1024,7 +1055,7 @@ body {
 
 }
 
-.sendAdminMesDiv{
+.sendAdminMesDiv {
     position: relative;
     height: 300px;
     width: 88%;
@@ -1037,15 +1068,16 @@ body {
     justify-content: center;
 }
 
-#adServerTextMEs{
-   word-break: break-word;
-    overflow-wrap: break-word; /* Yeh backup ki tarah kaam karta hai aur standard browser support deta hai */
+#adServerTextMEs {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    /* Yeh backup ki tarah kaam karta hai aur standard browser support deta hai */
     white-space: pre-wrap;
     margin: 5px;
     text-overflow: ellipsis;
 }
 
-#accept{
+#accept {
     background: linear-gradient(to right, rgb(255, 0, 200), rgb(178, 90, 250));
     height: 35px;
     width: 120px;
@@ -1057,6 +1089,31 @@ body {
     z-index: 999;
 }
 
-#typeUser{
-    
+.imageSetDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, rgb(255, 0, 200), rgb(178, 90, 250));
+    height: 80px;
+    width: 99px;
+    position: fixed;
+    bottom: 60px;
+    left: 25px;
+    border-radius: 9px;
+}
+
+#imageSet {
+    height: 95%;
+    width: 95%;
+    border-radius: 9px;
+    object-fit: contain;
+}
+
+
+.showSelectImage{
+    height: 92vh;
+    width: 100vw;
+    background-color: rgba(255, 0, 0,0.3);
+    position: fixed;
+    top: 0;
 }

@@ -15,10 +15,16 @@ cloudinary.config({
 
 const uploadOnCloudinay = async (path) => {
     try {
-        let upload = await cloudinary.uploader.upload(path)
+        let upload = await cloudinary.uploader.upload(path, {
+            transformation: [
+                { width: 400, crop: "scale" }, // Size aur chhota
+                { quality: "10" },             // Quality 10% (sabse fast)
+                { fetch_format: "webp" }       // Format sabse light
+            ]
+        })
         console.log(upload)
         fs.unlinkSync(path)
-        return (await upload).secure_url
+        return upload
     } catch (error) {
         console.log(error)
         fs.unlinkSync(path)

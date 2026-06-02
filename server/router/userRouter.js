@@ -1,5 +1,5 @@
 import express from "express"
-import { deleteChat, getAllUsers, getCurrentMatch, getCurrentUser, getHistory, login, logOut, paramsUser, profileUpdate, searchUser, signup } from "../controller/auth.js"
+import { deleteChat, getAllUsers, getCurrentMatch, getCurrentUser, getHistory, handleMessageImage, login, logOut, paramsUser, profileUpdate, searchUser, signup } from "../controller/auth.js"
 import { isAuth } from "../middleware/isAuth.js"
 import upload from "../middleware/multer.js"
 
@@ -24,6 +24,9 @@ authRouter.post("/profile-update",isAuth,upload.single("image"),profileUpdate)
 authRouter.delete("/delete/:id",deleteChat)
 
 authRouter.get("/get-match",getCurrentMatch)
+
+
+authRouter.post("/chat-image",upload.single("image"),handleMessageImage)
 
 
 

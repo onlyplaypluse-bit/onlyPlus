@@ -62,6 +62,7 @@ function Profile() {
             let res = await axios.post(`${serverUrl}/profile-update`, formData, {
                 withCredentials: true,
                 headers: {
+                    "Content-Type": "multipart/form-data"
                 }
             })
             console.log(res)

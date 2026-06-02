@@ -249,7 +249,7 @@ export const getCurrentMatch = async (req, res) => {
 
             // const response = await fetch("https://api.cricapi.com/v1/currentMatches?apikey=6807ad28-e924-4dbd-8517-c66d56b6c9af&offset=0")
 
-            const response = await fetch( `https://api.cricapi.com/v1/currentMatches?apikey=${process.env.CRIC_API_KEY}&offset=0`);
+            const response = await fetch(`https://api.cricapi.com/v1/currentMatches?apikey=${process.env.CRIC_API_KEY}&offset=0`);
 
             const resData = await response.json()
 
@@ -302,6 +302,32 @@ export const getCurrentMatch = async (req, res) => {
 
 
 
+export const handleMessageImage = async (req, res) => {
+    try {
+        if(!req.file){
+            return res.status(400).json({ error: "Koi image select nahi ki gayi hai!" });
+        }
+
+        const imageUrl = await uploadOnCloudinay(req.file.path)
+
+        console.log("URL jo mila:", imageUrl);
+
+
+        if (!imageUrl) {
+            return res.status(500).json({ error: "Cloudinary upload failed!" });
+        }
+
+
+        return res.status(200).json({
+            success:true,
+            image:imageUrl
+        })
+
+    } catch (error) {
+        console.log("handleMessageImage error:", error);
+        return res.status(500).json({ error: "Internal Server Error in handleMessageImage" });
+    }
+}
 
 
 
