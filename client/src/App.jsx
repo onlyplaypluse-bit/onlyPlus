@@ -106,6 +106,8 @@ function App() {
         <Route path="/message" element={<AllUsers />} />
         <Route path="/send-message/:id" element={<SendMessage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="*" element={<Profile />} />
+
       </Routes>
 
     </>
