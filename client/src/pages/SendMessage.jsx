@@ -285,8 +285,8 @@ function SendMessage() {
                     del &&
                     <div className="deleteDiv">
                         <input type="file" style={{ display: "none" }} onChange={handleSendImage} ref={file} name="" id="" />
-                        <p id="Ichat" onClick={() => { file.current.click() }}>Image<span><GoPlus /></span> </p>
-                        <p id="Dchat" onClick={deleteAPI}>Delete <span><RiDeleteBin6Line /></span> </p>
+                        <p id="Ichat" style={{cursor:"pointer"}} onClick={() => { file.current.click() }}>Image<span><GoPlus /></span> </p>
+                        <p id="Dchat" style={{cursor:"pointer"}} onClick={deleteAPI}>Delete <span><RiDeleteBin6Line /></span> </p>
                     </div>
                 }
 
