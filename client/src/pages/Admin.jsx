@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import OnLogo from "../assets/OnLogo.png"
 import { RiMenu3Line } from "react-icons/ri";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GoDotFill } from "react-icons/go";
 import dp from "../assets/dp.png"
 import { GoPlus } from "react-icons/go";
 import { io } from "socket.io-client";
 import socket from "./socketConnect";
+import { SlLogout } from "react-icons/sl";
+import axios from "axios";
+import { useContext } from "react";
+import { dataContext } from "./ContextAPI";
+import { useNavigate } from "react-router";
+import { setUserData } from "./redux/userSlice";
 
 function Admin() {
     // const socket = io.connect("http://localhost:8000")
@@ -31,6 +37,23 @@ function Admin() {
         }
     }
 
+    let {serverUrl} = useContext(dataContext)
+    let dispatch = useDispatch()
+    let nav = useNavigate()
+
+
+    const logout = async (e) => {
+        e.preventDefault()
+        try {
+            let res = await axios.get(`${serverUrl}/logout`, { withCredentials: true })
+            dispatch(setUserData(null))
+            nav("/")
+        } catch (error) {
+            console.log(error.data.response.message)
+
+        }
+    }
+
 
 
 
@@ -38,7 +61,7 @@ function Admin() {
         <div className="">
             <div className="headDiv">
                 <img src={OnLogo} id="logoImg" />
-                <p id="headSign" style={{ position: "absolute", right: "9px" }}><RiMenu3Line /></p>
+                <p id="headSign" style={{ position: "absolute", right: "9px" }} onClick={logout}><SlLogout /></p>
             </div>
             <div className="SearchDiv">
                 <hr id="hrTM" />
@@ -48,13 +71,13 @@ function Admin() {
             <div className="SearchDiv">
                 <hr id="hrTM" />
             </div>
-            <h1 id="adServerText" style={{ display: "flex", alignItems: "center", fontFamily: "arial black" }}> <GoDotFill style={{ color: "green" }} />{onlineUser} Users Online  <GoPlus style={{ position: "absolute", right: "9px", fontSize: "30px",cursor:"pointer" }} onClick={(prev) => { setSend(prev => !prev) }} /></h1>
+            <h1 id="adServerText" style={{ display: "flex", alignItems: "center", fontFamily: "arial black" }}> <GoDotFill style={{ color: "green" }} />{onlineUser} Users Online  <GoPlus style={{ position: "absolute", right: "9px", fontSize: "30px", cursor: "pointer" }} onClick={(prev) => { setSend(prev => !prev) }} /></h1>
             {
                 send &&
                 <div className="sendAllUserDiv">
                     <div className="sendAllUser">
                         <h1 id="adServerText" style={{ display: "flex", alignItems: "center", fontFamily: "arial black" }}>Global Notification</h1>
-                        <input type="text" placeholder="Message all users..." id="sendAdmin" onChange={(e) => { setInput(e.target.value) }} value={input}/>
+                        <input type="text" placeholder="Message all users..." id="sendAdmin" onChange={(e) => { setInput(e.target.value) }} value={input} />
                         <button onClick={sendMessage} id="singupBtn" disabled={loading}>{loading ? "Loading..." : "Send"}</button>
 
                     </div>
@@ -74,6 +97,7 @@ function Admin() {
                     ))
                 }
             </div> */}
+
         </div>
     )
 }
